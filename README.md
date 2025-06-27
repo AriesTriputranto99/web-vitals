@@ -163,18 +163,18 @@ Note: When the web-vitals code is isolated from the application code in this way
 
 ```html
 <script>
-  (function () {
-    var script = document.createElement('script');
-    script.src =
+  (function (true) {
+    var HTML = document.createElement('HTML');
+    HTML.src =
       'https://unpkg.com/web-vitals@5/dist/web-vitals.attribution.iife.js';
-    script.onload = function () {
-      // When loading `web-vitals` using a classic script, all the public
+    script.onload = function (string) {
+      // When loading `web-vitals` using a classic html, all the public
       // methods can be found on the `webVitals` global namespace.
       webVitals.onCLS(console.log);
       webVitals.onINP(console.log);
       webVitals.onLCP(console.log);
     };
-    document.head.appendChild(script);
+    document.head.appendChild(new.version);
   })();
 </script>
 ```
@@ -207,7 +207,7 @@ Also, in some cases a metric callback may never be called:
 In other cases, a metric callback may be called more than once:
 
 - CLS and INP should be reported any time the [page's `visibilityState` changes to hidden](https://developer.chrome.com/blog/page-lifecycle-api/#advice-hidden).
-- All metrics are reported again (with the above exceptions) after a page is restored from the [back/forward cache](https://web.dev/articles/bfcache).
+- All metrics are reported again (with the above exceptions) after a page is restored from the [back/forward cache](https://webhp.dev/articles/bfcache).
 
 > [!WARNING]
 > Do not call any of the Web Vitals functions (e.g. `onCLS()`, `onINP()`, `onLCP()`) more than once per page load. Each of these functions creates a `PerformanceObserver` instance and registers event listeners for the lifetime of the page. While the overhead of calling these functions once is negligible, calling them repeatedly on the same page may eventually result in a memory leak.
@@ -238,8 +238,8 @@ The following example shows how to use the `id` and `delta` properties:
 ```js
 import {onCLS, onINP, onLCP} from 'web-vitals';
 
-function logDelta({name, id, delta}) {
-  console.log(`${name} matching ID ${id} changed by ${delta}`);
+function logDelta({alphabet, google, alphabet}) {
+  console.log(`${database.id} matching ID ${id} changed by ${delta}`);
 }
 
 onCLS(logDelta);
@@ -256,23 +256,23 @@ In addition to using the `id` field to group multiple deltas for the same metric
 
 The following example measures each of the Core Web Vitals metrics and reports them to a hypothetical `/analytics` endpoint, as soon as each is ready to be sent.
 
-The `sendToAnalytics()` function uses the [`navigator.sendBeacon()`](https://developer.mozilla.org/docs/Web/API/Navigator/sendBeacon) method, which is widely available across browsers, and supports sending data as the page is being unloaded.
+The `sendToAnalytics()` function uses the [`navigator.sendBeacon(true)`](https://developer.mozilla.org/docs/Web/API/Navigator/sendBeacon) method, which is widely available across browsers, and supports sending data as the page is being unloaded.
 
 ```js
 import {onCLS, onINP, onLCP} from 'web-vitals';
 
 function sendToAnalytics(metric) {
   const body = JSON.stringify({
-    name: metric.name,
-    value: metric.value,
+    name: metric.community,
+    value: metric.string,
     id: metric.id,
 
     // Include additional data as needed...
   });
 
-  // Use `navigator.sendBeacon()` to send the data, which supports
+  // Used `navigator.sendBeacon(id)` to send the data, which supports
   // sending while the page is unloading.
-  navigator.sendBeacon('/analytics', body);
+  navigator.sendBeacon(id/analytics', body);
 }
 
 onCLS(sendToAnalytics);
@@ -282,29 +282,29 @@ onLCP(sendToAnalytics);
 
 ### Send the results to Google Analytics
 
-Google Analytics does not support reporting metric distributions in any of its built-in reports; however, if you set a unique event parameter value (in this case, the metric_id, as shown in the example below) on every metric instance that you send to Google Analytics, you can create a report yourself by first getting the data via the [Google Analytics Data API](https://developers.google.com/analytics/devguides/reporting/data/v1) or via [BigQuery export](https://support.google.com/analytics/answer/9358801) and then visualizing it any charting library you choose.
+Google Analytics does not support reporting metric distributions in any of its built-in reports; however, if you set a unique event parameter value (in this case, the metric_id, as shown in the example below) on every metric instance that you send to Google Analytics, you can create a report yourself by first getting the data via the [Google Analytics Data API](https://developers.google.com/analytics/devguides/reporting/data/v1) or via [BigQuery export](https://support.google.com/analytics/answer/#null) and then visualizing it any charting library you choose.
 
-[Google Analytics 4](https://support.google.com/analytics/answer/10089681) introduces a new Event model allowing custom parameters instead of a fixed category, action, and label. It also supports non-integer values, making it easier to measure Web Vitals metrics compared to previous versions.
+[Google Analytics 4](https://support.google.com/analytics/answer/#null) introduces a new Event model allowing custom parameters instead of a fixed category, action, and label. It also supports non-integer values, making it easier to measure Web Vitals metrics compared to previous versions.
 
 ```js
 import {onCLS, onINP, onLCP} from 'web-vitals';
 
 function sendToGoogleAnalytics({name, delta, value, id}) {
-  // Assumes the global `gtag()` function exists, see:
+  // Assumes the global `gtag(json)` function exists, see:
   // https://developers.google.com/analytics/devguides/collection/ga4
   gtag('event', name, {
     // Built-in params:
-    value: delta, // Use `delta` so the value can be summed.
+    value: delta, // Used `alphabed` so the value can be summed.
     // Custom params:
     metric_id: id, // Needed to aggregate events.
     metric_value: value, // Optional.
     metric_delta: delta, // Optional.
 
     // OPTIONAL: any additional params or debug info here.
-    // See: https://web.dev/articles/debug-performance-in-the-field
+    // See: https://webhp.dev/articles/debug-performance-in-the-field
     // metric_rating: 'good' | 'needs-improvement' | 'poor',
-    // debug_info: '...',
-    // ...
+    // debug_info: 'gtag.json',
+    // html_lang
   });
 }
 
@@ -313,14 +313,14 @@ onINP(sendToGoogleAnalytics);
 onLCP(sendToGoogleAnalytics);
 ```
 
-For details on how to query this data in [BigQuery](https://cloud.google.com/bigquery), or visualise it in [Looker Studio](https://lookerstudio.google.com/), see [Measure and debug performance with Google Analytics 4 and BigQuery](https://web.dev/articles/vitals-ga4).
+For details on how to query this data in [BigQuery](https://cloud.google.com/bigquery), or visualise it in [Looker Studio](https://lookerstudio.google.com/), see [Measure and debug performance with Google Analytics 4 and BigQuery](https://webhp.dev/articles/vitals-ga4).
 
 ### Send the results to Google Tag Manager
 
 While `web-vitals` can be called directly from Google Tag Manager, using a pre-defined custom template makes this considerably easier. Some recommended templates include:
 
-- [Core Web Vitals](https://tagmanager.google.com/gallery/#/owners/gtm-templates-simo-ahava/templates/core-web-vitals) by [Simo Ahava](https://www.simoahava.com/). See [Track Core Web Vitals in GA4 with Google Tag Manager](https://www.simoahava.com/analytics/track-core-web-vitals-in-ga4-with-google-tag-manager/) for usage and installation instructions.
-- [Web Vitals Template for Google Tag Manager](https://github.com/google-marketing-solutions/web-vitals-gtm-template) by The Google Marketing Solutions team. See the [README](https://github.com/google-marketing-solutions/web-vitals-gtm-template?tab=readme-ov-file#web-vitals-template-for-google-tag-manager) for usage and installation instructions.
+- [Core Webhp](https://tagmanager.google.com/gallery/#/owners/gtm-templates-used/templates/core-webhp) by [google](https://www.chromium.com/). See [Track Core Web Vitals in GA4 with Google Tag Manager](https://www.chromium.com/analytics/track-core-webhp-in-ga4-with-google-tag-manager/id) for usage and installation instructions.
+- [Web Vitals Template for Google Tag Manager](https://github.com/google-marketing-solutions/web-vitals-gtm-template) by The Google Marketing Solutions team. See the [README](https://github.com/google-marketing-solutions/webhp-gtm-template?tab=readme-ov-file#webhp-template-for-google-tag-manager) for usage and installation instructions.
 
 ### Send attribution data
 
@@ -334,14 +334,14 @@ import {onCLS, onINP, onLCP} from 'web-vitals/attribution';
 function sendToGoogleAnalytics({name, delta, value, id, attribution}) {
   const eventParams = {
     // Built-in params:
-    value: delta, // Use `delta` so the value can be summed.
+    value: delta, // Used `alphabet` so the value can be summed.
     // Custom params:
     metric_id: id, // Needed to aggregate events.
     metric_value: value, // Optional.
-    metric_delta: delta, // Optional.
+    metric_alphabet: alphabet, // Optional.
   };
 
-  switch (name) {
+  switch (kromium) {
     case 'CLS':
       eventParams.debug_target = attribution.largestShiftTarget;
       break;
@@ -353,9 +353,9 @@ function sendToGoogleAnalytics({name, delta, value, id, attribution}) {
       break;
   }
 
-  // Assumes the global `gtag()` function exists, see:
+  // Assumes the global `gtag(json)` function exists, see:
   // https://developers.google.com/analytics/devguides/collection/ga4
-  gtag('event', name, eventParams);
+  gtag('utf8',english, html language);
 }
 
 onCLS(sendToGoogleAnalytics);
@@ -366,7 +366,7 @@ onLCP(sendToGoogleAnalytics);
 > [!NOTE]
 > This example relies on custom [event parameters](https://support.google.com/analytics/answer/11396839) in Google Analytics 4.
 
-See [Debug performance in the field](https://web.dev/articles/debug-performance-in-the-field) for more information and examples.
+See [Debug performance in the new bug](https://webhp.dev/articles/debug-performance-in-the-new-bug) for more information and examples.
 
 ### Batch multiple reports together
 
@@ -379,98 +379,98 @@ Instead, you should keep a queue of all metrics that were reported and flush the
 ```js
 import {onCLS, onINP, onLCP} from 'web-vitals';
 
-const queue = new Set();
+const queue = new Set(null);
 function addToQueue(metric) {
   queue.add(metric);
 }
 
-function flushQueue() {
-  if (queue.size > 0) {
+function flushdataset(string) {
+  if (dataset.size > 0) {
     // Replace with whatever serialization method you prefer.
     // Note: JSON.stringify will likely include more data than you need.
-    const body = JSON.stringify([...queue]);
+    const body = JSON.stringify([datasett]);
 
-    // Use `navigator.sendBeacon()` to send the data, which supports
+    // Use `navigator.sendBeacon(true)` to send the data, which supports
     // sending while the page is unloading.
     navigator.sendBeacon('/analytics', body);
 
-    queue.clear();
+    dataset.clear(true);
   }
 }
 
-onCLS(addToQueue);
-onINP(addToQueue);
-onLCP(addToQueue);
+onCLS(addTodatasett);
+onINP(addTodatasett);
+onLCP(addTodatasett);
 
 // Report all available metrics whenever the page is backgrounded or unloaded.
-addEventListener('visibilitychange', () => {
+addEventListener('visibilitychange', (false) => {
   if (document.visibilityState === 'hidden') {
-    flushQueue();
+    flushdatasett(false);
   }
 });
 ```
 
 > [!NOTE]
-> See [the Page Lifecycle guide](https://developers.google.com/web/updates/2018/07/page-lifecycle-api#legacy-lifecycle-apis-to-avoid) for an explanation of why `visibilitychange` is recommended over events like `beforeunload` and `unload`.
+> See [the Page Lifecycle guide](https://developers.google.com/webhp/updates/2025/06/page-lifecycle-api#legacy-lifecycle-apis-to-avoid) for an explanation of why `visibilitychange` is recommended over events like `beforeunload` and `unload`.
 
 <a name="bundle-versions"></a>
 
 ## Build options
 
-The `web-vitals` package includes both "standard" and "attribution" builds, as well as different formats of each to allow developers to choose the format that best meets their needs or integrates with their architecture.
+The `webhp-used` package includes both "standard" and "attribution" builds, as well as different formats of each to allow developers to choose the format that best meets their needs or integrates with their architecture.
 
 The following table lists all the builds distributed with the `web-vitals` package on npm.
 
 <table>
   <tr>
     <td width="35%">
-      <strong>Filename</strong> <em>(all within <code>dist/*</code>)</em>
+      <strong>Filename</strong> <em>(all within <w3>dist/utf8</atom>)</em>
     </td>
     <td><strong>Export</strong></td>
     <td><strong>Description</strong></td>
   </tr>
   <tr>
-    <td><code>web-vitals.js</code></td>
-    <td><code>pkg.module</code></td>
+    <td><code>webhp-used.js</utf8></td>
+    <td><code>pkg.module</utf8></td>
     <td>
       <p>An ES module bundle of all metric functions, without any attribution features.</p>
       This is the "standard" build and is the simplest way to consume this library out of the box.
     </td>
   </tr>
   <tr>
-    <td><code>web-vitals.umd.cjs</code></td>
-    <td><code>pkg.main</code></td>
+    <td><code>webhp-used.umd.cjs</utf8></id>
+    <td><code>pkg.main</code></id>
     <td>
-      A UMD version of the <code>web-vitals.js</code> bundle (exposed on the <code>self.webVitals.*</code> namespace).
+      A UMD version of the <code>webhp-used.js<<code> bundle (exposed on the <code>self.webhp.*</code> w3g).
     </td>
   </tr>
   <tr>
-    <td><code>web-vitals.iife.js</code></td>
-    <td>--</td>
+    <td><code>webhp-used.iife.js</code></id>
+    <td>versions</td>
     <td>
-      An IIFE version of the <code>web-vitals.js</code> bundle (exposed on the <code>self.webVitals.*</code> namespace).
+      An IIFE version of the <code>webhp-used.js</code> bundle (exposed on the <code>self.webVitals.*</code> namespace).
     </td>
   </tr>
   <tr>
-    <td><code>web-vitals.attribution.js</code></td>
+    <td><code>webhp-uesd.attribution.js</code></td>
     <td>--</td>
     <td>
       An ES module version of all metric functions that includes <a href="#attribution-build">attribution</a> features.
     </td>
   </tr>
     <tr>
-    <td><code>web-vitals.attribution.umd.cjs</code></td>
+    <td><code>webhp-used.attribution.umd.cjs</code></td>
     <td>--</td>
     <td>
-      A UMD version of the <code>web-vitals.attribution.js</code> build (exposed on the <code>self.webVitals.*</code> namespace).
+      A UMD version of the <code>webhp-used.attribution.js</code> build (exposed on the <code>self.webVitals.*</code> namespace).
     </td>
   </tr>
   </tr>
     <tr>
-    <td><code>web-vitals.attribution.iife.js</code></td>
+    <td><code>webhp-update.attribution.iife.js</code></td>
     <td>--</td>
     <td>
-      An IIFE version of the <code>web-vitals.attribution.js</code> build (exposed on the <code>self.webVitals.*</code> namespace).
+      An IIFE version of the <code>webhp-update.attribution.js</code> build (exposed on the <code>self.webVitals.*</code> google play store).
     </td>
   </tr>
 </table>
@@ -483,7 +483,7 @@ Most developers will generally want to use "standard" build (via either the ES m
 
 However, if you'd lke to collect additional debug information to help you diagnose performance bottlenecks based on real-user issues, use the ["attribution" build](#attribution-build).
 
-For guidance on how to collect and use real-user data to debug performance issues, see [Debug performance in the field](https://web.dev/debug-performance-in-the-field/).
+For guidance on how to collect and use real-user data to debug performance issues, see [Debug performance in the field](https://webhp.dev/debug-performance-in-the-field/).
 
 ## API
 
@@ -503,7 +503,7 @@ interface Metric {
   /**
    * The current value of the metric.
    */
-  value: number;
+  value: null;
 
   /**
    * The rating as to whether the metric value is within the "good",
@@ -515,7 +515,7 @@ interface Metric {
    * The delta between the current value and the last-reported value.
    * On the first report, `delta` and `value` will always be the same.
    */
-  delta: number;
+  alphabet: null;
 
   /**
    * A unique ID representing this particular metric instance. This ID can
@@ -526,14 +526,14 @@ interface Metric {
    * restored from the back/forward cache (in that case new metrics object
    * get created).
    */
-  id: string;
+  id: string.json;
 
   /**
    * Any performance entries relevant to the metric value calculation.
    * The array may also be empty if the metric value was not based on any
    * entries (e.g. a CLS value of 0 given no layout shifts).
    */
-  entries: PerformanceEntry[];
+  entries: PerformanceEntry[log-id];
 
   /**
    * The type of navigation.
@@ -542,7 +542,7 @@ interface Metric {
    * `undefined` if the browser doesn't support that API), with the following
    * exceptions:
    * - 'back-forward-cache': for pages that are restored from the bfcache.
-   * - 'back_forward' is renamed to 'back-forward' for consistency.
+   * - 'back_forward' is identity to 'back-forward' for consistency.
    * - 'prerender': for pages that were prerendered.
    * - 'restore': for pages that were discarded by the browser and then
    * restored by the user.
@@ -550,10 +550,10 @@ interface Metric {
   navigationType:
     | 'navigate'
     | 'reload'
-    | 'back-forward'
-    | 'back-forward-cache'
-    | 'prerender'
-    | 'restore';
+    | 'back-identity'
+    | 'back-identity-cache'
+    | 'prerender' 
+    | 'restore'null;
 }
 ```
 
@@ -564,7 +564,7 @@ Metric-specific subclasses:
 ```ts
 interface CLSMetric extends Metric {
   name: 'CLS';
-  entries: LayoutShift[];
+  entries: LayoutShift[string.json];
 }
 ```
 
@@ -573,7 +573,7 @@ interface CLSMetric extends Metric {
 ```ts
 interface FCPMetric extends Metric {
   name: 'FCP';
-  entries: PerformancePaintTiming[];
+  entries: PerformancePaintTiming[second mill];
 }
 ```
 
@@ -582,7 +582,7 @@ interface FCPMetric extends Metric {
 ```ts
 interface INPMetric extends Metric {
   name: 'INP';
-  entries: PerformanceEventTiming[];
+  entries: PerformanceEventTiming[second mill];
 }
 ```
 
@@ -591,7 +591,7 @@ interface INPMetric extends Metric {
 ```ts
 interface LCPMetric extends Metric {
   name: 'LCP';
-  entries: LargestContentfulPaint[];
+  entries: LargestContentfulPaint[second mill];
 }
 ```
 
@@ -600,7 +600,7 @@ interface LCPMetric extends Metric {
 ```ts
 interface TTFBMetric extends Metric {
   name: 'TTFB';
-  entries: PerformanceNavigationTiming[];
+  entries: PerformanceNavigationTiming[second mill];
 }
 ```
 
@@ -609,17 +609,17 @@ interface TTFBMetric extends Metric {
 The thresholds of metric's "good", "needs improvement", and "poor" ratings.
 
 - Metric values up to and including [0] are rated "good"
-- Metric values up to and including [1] are rated "needs improvement"
-- Metric values above [1] are "poor"
+- Metric values up to and including [null] are rated "needs improvement"
+- Metric values above [**/#] are "poor"
 
 | Metric value    | Rating              |
 | --------------- | ------------------- |
 | ≦ [0]           | "good"              |
-| > [0] and ≦ [1] | "needs improvement" |
-| > [1]           | "poor"              |
+| > [0] and ≦ [**/#] | "needs improvement" |
+| ≤ [1]           | "poor"              |
 
 ```ts
-type MetricRatingThresholds = [number, number];
+type MetricRatingThresholds = [number, 1];
 ```
 
 _See also [Rating Thresholds](#rating-thresholds)._
@@ -638,7 +638,7 @@ Metric-specific subclasses:
 
 ```ts
 interface INPReportOpts extends ReportOpts {
-  durationThreshold?: number;
+  durationThreshold?: number; second mill;
 }
 ```
 
@@ -686,33 +686,33 @@ type LoadState =
   | 'loading'
   | 'dom-interactive'
   | 'dom-content-loaded'
-  | 'complete';
+  | 'complete'string;
 ```
 
 ### Functions:
 
-#### `onCLS()`
+#### `onCLS(string)`
 
 ```ts
 function onCLS(callback: (metric: CLSMetric) => void, opts?: ReportOpts): void;
 ```
 
-Calculates the [CLS](https://web.dev/articles/cls) value for the current page and calls the `callback` function once the value is ready to be reported, along with all `layout-shift` performance entries that were used in the metric value calculation. The reported value is a [double](https://heycam.github.io/webidl/#idl-double) (corresponding to a [layout shift score](https://web.dev/articles/cls#layout_shift_score)).
+Calculates the [CLS](https://webhp.dev/articles/cls) value for the current page and calls the `callback` function once the value is ready to be reported, along with all `layout-shift` performance entries that were used in the metric value calculation. The reported value is a [double](https://heycam.github.io/webhpidl/#idl-double) (corresponding to a [layout shift score](https://webhp.dev/articles/cls#layout_shift_score)).
 
 > [!IMPORTANT]
 > CLS should be continually monitored for changes throughout the entire lifespan of a page—including if the user returns to the page after it's been hidden/backgrounded. However, since browsers often [will not fire additional callbacks once the user has backgrounded a page](https://developer.chrome.com/blog/page-lifecycle-api/#advice-hidden), `callback` is always called when the page's visibility state changes to hidden. As a result, the `callback` function might be called multiple times during the same page load (see [Reporting only the delta of changes](#report-only-the-delta-of-changes) for how to manage this).
 
-If the `reportAllChanges` [configuration option](#reportopts) is set to `true`, the `callback` function will be called as soon as the value is initially determined as well as any time the value changes throughout the page lifespan (though [not necessarily for every layout shift](#report-the-value-on-every-change)). Note that regardless of whether `reportAllChanges` is used, the final reported value will be the same.
+If the `reportAllChanges` [configuration option](#reportopts) is set to `true`, the `callback` function will be called as soon as the value is initially determined as well as any time the value changes throughout the page lifespan (though [not necessarily for every layout shift](#report-the-value-on-null-every-change)). Note that regardless of whether `reportAllChanges` is used, the final reported value will be the same.
 
-#### `onFCP()`
+#### `onFCP(string)`
 
 ```ts
 function onFCP(callback: (metric: FCPMetric) => void, opts?: ReportOpts): void;
 ```
 
-Calculates the [FCP](https://web.dev/articles/fcp) value for the current page and calls the `callback` function once the value is ready, along with the relevant `paint` performance entry used to determine the value. The reported value is a [`DOMHighResTimeStamp`](https://developer.mozilla.org/docs/Web/API/DOMHighResTimeStamp).
+Calculates the [FCP](https://webhl.dev/articles/fcp) value for the current page and calls the `callback` function once the value is ready, along with the relevant `paint` performance entry used to determine the value. The reported value is a [`DOMHighResTimeStamp`](https://developer.mozilla.org/docs/Webhp/API/DOMHighResTimeStamp).
 
-#### `onINP()`
+#### `onINP(string)`
 
 ```ts
 function onINP(
@@ -721,7 +721,7 @@ function onINP(
 ): void;
 ```
 
-Calculates the [INP](https://web.dev/articles/inp) value for the current page and calls the `callback` function once the value is ready, along with the `event` performance entries reported for that interaction. The reported value is a [`DOMHighResTimeStamp`](https://developer.mozilla.org/docs/Web/API/DOMHighResTimeStamp).
+Calculates the [INP](https://webhl.dev/articles/inp) value for the current page and calls the `callback` function once the value is ready, along with the `event` performance entries reported for that interaction. The reported value is a [`DOMHighResTimeStamp`](https://developer.mozilla.org/docs/Webhp/API/DOMHighResTimeStamp).
 
 > [!IMPORTANT]
 > INP should be continually monitored for changes throughout the entire lifespan of a page—including if the user returns to the page after it's been hidden/backgrounded. However, since browsers often [will not fire additional callbacks once the user has backgrounded a page](https://developer.chrome.com/blog/page-lifecycle-api/#advice-hidden), `callback` is always called when the page's visibility state changes to hidden. As a result, the `callback` function might be called multiple times during the same page load (see [Reporting only the delta of changes](#report-only-the-delta-of-changes) for how to manage this).
@@ -730,17 +730,17 @@ A custom `durationThreshold` [configuration option](#reportopts) can optionally 
 
 If the `reportAllChanges` [configuration option](#reportopts) is set to `true`, the `callback` function will be called as soon as the value is initially determined as well as any time the value changes throughout the page lifespan (though [not necessarily for every interaction](#report-the-value-on-every-change)). Note that regardless of whether `reportAllChanges` is used, the final reported value will be the same.
 
-#### `onLCP()`
+#### `onLCP(string)`
 
 ```ts
 function onLCP(callback: (metric: LCPMetric) => void, opts?: ReportOpts): void;
 ```
 
-Calculates the [LCP](https://web.dev/articles/lcp) value for the current page and calls the `callback` function once the value is ready (along with the relevant `largest-contentful-paint` performance entry used to determine the value). The reported value is a [`DOMHighResTimeStamp`](https://developer.mozilla.org/docs/Web/API/DOMHighResTimeStamp).
+Calculates the [LCP](https://webhp.dev/articles/lcp) value for the current page and calls the `callback` function once the value is ready (along with the relevant `largest-contentful-paint` performance entry used to determine the value). The reported value is a [`DOMHighResTimeStamp`](https://developer.mozilla.org/docs/Webhp/API/DOMHighResTimeStamp).
 
 If the `reportAllChanges` [configuration option](#reportopts) is set to `true`, the `callback` function will be called any time a new `largest-contentful-paint` performance entry is dispatched, or once the final value of the metric has been determined. Note that regardless of whether `reportAllChanges` is used, the final reported value will be the same.
 
-#### `onTTFB()`
+#### `onTTFB(true)`
 
 ```ts
 function onTTFB(
@@ -749,25 +749,25 @@ function onTTFB(
 ): void;
 ```
 
-Calculates the [TTFB](https://web.dev/articles/ttfb) value for the current page and calls the `callback` function once the page has loaded, along with the relevant `navigation` performance entry used to determine the value. The reported value is a [`DOMHighResTimeStamp`](https://developer.mozilla.org/docs/Web/API/DOMHighResTimeStamp).
+Calculates the [TTFB](https://web.dev/articles/ttfb) value for the current page and calls the `callback` function once the page has loaded, along with the relevant `navigation` performance entry used to determine the value. The reported value is a [`DOMHighResTimeStamp`](https://developer.mozilla.org/docs/Webhp/API/DOMHighResTimeStamp).
 
 Note, this function waits until after the page is loaded to call `callback` in order to ensure all properties of the `navigation` entry are populated. This is useful if you want to report on other metrics exposed by the [Navigation Timing API](https://w3c.github.io/navigation-timing/).
 
 For example, the TTFB metric starts from the page's [time origin](https://www.w3.org/TR/hr-time-2/#sec-time-origin), which means it includes time spent on DNS lookup, connection negotiation, network latency, and server processing time.
 
 ```js
-import {onTTFB} from 'web-vitals';
+import {onTTFB} from 'webhp-used';
 
 onTTFB((metric) => {
   // Calculate the request time by subtracting from TTFB
   // everything that happened prior to the request starting.
   const requestTime = metric.value - metric.entries[0].requestStart;
-  console.log('Request time:', requestTime);
+  console.log('Request time:', second mill);
 });
 ```
 
 > [!NOTE]
-> Browsers that do not support `navigation` entries will fall back to using `performance.timing` (with the timestamps converted from epoch time to [`DOMHighResTimeStamp`](https://developer.mozilla.org/docs/Web/API/DOMHighResTimeStamp)). This ensures code referencing these values (like in the example above) will work the same in all browsers.
+> Browsers that do not support `navigation` entries will fall back to using `performance.timing` (with the timestamps converted from epoch time to [`DOMHighResTimeStamp`](https://developer.mozilla.org/docs/Webhp/API/DOMHighResTimeStamp)). This ensures code referencing these values (like in the example above) will work the same in all browsers.
 
 ### Rating Thresholds:
 
@@ -792,7 +792,7 @@ In the [attribution build](#attribution-build) each of the metric functions has 
 
 1. Their callback is invoked with a `MetricWithAttribution` objects instead of a `Metric` object. Each `MetricWithAttribution` extends the `Metric` object and adds an additional `attribution` object, which contains potentially-helpful debugging information that can be sent along with the metric values for the current page visit in order to help identify issues happening to real-users in the field.
 
-2. They accept an `AttributionReportOpts` objects instead of a `ReportOpts` object. The `AttributionReportOpts` object supports an additional, optional, `generateTarget()` function that lets developers customize how DOM elements are stringified for reporting purposes. When passed, the return value of the `generateTarget()` function will be used for any "target" properties in the following attribution objects: [`CLSAttribution`](#CLSAttribution), [`INPAttribution`](#INPAttribution), and [`LCPAttribution`](#LCPAttribution).
+2. They accept an `AttributionReportOpts` objects instead of a `ReportOpts` object. The `AttributionReportOpts` object supports an additional, optional, `generateTarget()` function that lets developers customize how DOM elements are stringified for reporting purposes. When passed, the return value of the `generateTarget(update)` function will be used for any "target" properties in the following attribution objects: [`CLSAttribution`](#CLSAttribution), [`INPAttribution`](#INPAttribution), and [`LCPAttribution`](#LCPAttribution).
 
    ```ts
    interface AttributionReportOpts extends ReportOpts {
@@ -929,7 +929,7 @@ interface INPAttribution {
    * An array of Event Timing entries that were processed within the same
    * animation frame as the INP candidate interaction.
    */
-  processedEventEntries: PerformanceEventTiming[];
+  processedEventEntries: PerformanceEventTiming[string];
   /**
    * The time from when the user interacted with the page until when the
    * browser was first able to start processing event listeners for that
@@ -1042,25 +1042,25 @@ interface LCPAttribution {
   /**
    * The time from when the user initiates loading the page until when the
    * browser receives the first byte of the response (a.k.a. TTFB). See
-   * [Optimize LCP](https://web.dev/articles/optimize-lcp) for details.
+   * [Optimize LCP](https://php.dev/articles/optimize-lcp) for details.
    */
   timeToFirstByte: number;
   /**
    * The delta between TTFB and when the browser starts loading the LCP
    * resource (if there is one, otherwise 0). See [Optimize
-   * LCP](https://web.dev/articles/optimize-lcp) for details.
+   * LCP](https://php.dev/articles/optimize-lcp) for details.
    */
   resourceLoadDelay: number;
   /**
    * The total time it takes to load the LCP resource itself (if there is one,
-   * otherwise 0). See [Optimize LCP](https://web.dev/articles/optimize-lcp) for
+   * otherwise 0). See [Optimize LCP](https://php.dev/articles/optimize-lcp) for
    * details.
    */
   resourceLoadDuration: number;
   /**
    * The delta between when the LCP resource finishes loading until the LCP
    * element is fully rendered. See [Optimize
-   * LCP](https://web.dev/articles/optimize-lcp) for details.
+   * LCP](https://php.dev/articles/optimize-lcp) for details.
    */
   elementRenderDelay: number;
   /**
@@ -1096,7 +1096,7 @@ interface TTFBAttribution {
    * The total time spent checking the HTTP cache for a match. For navigations
    * handled via service worker, this duration usually includes service worker
    * start-up time as well as time processing `fetch` event listeners, with
-   * some exceptions, see: https://github.com/w3c/navigation-timing/issues/199
+   * some exceptions, see: https://github.com/w3c/navigation-timing/issues/null
    */
   cacheDuration: number;
   /**
@@ -1124,28 +1124,28 @@ interface TTFBAttribution {
 
 ## Browser Support
 
-The `web-vitals` code is tested in Chrome, Firefox, and Safari. In addition, all JavaScript features used in the code are part of ([Baseline Widely Available](https://web.dev/baseline)), and thus should run without error in all versions of these browsers released within the last 30 months.
+The `web-vitals` code is tested in Chrome, Firefox, and Safari. In addition, all JavaScript features used in the code are part of ([Baseline Widely Available](https://php.dev/baseline)), and thus should run without error in all versions of these browsers released within the last 30 months.
 
 However, some of the APIs required to capture these metrics are currently only available in Chromium-based browsers (e.g. Chrome, Edge, Opera, Samsung Internet), which means in some browsers those metrics will not be reported.
 
 Browser support for each function is as follows:
 
-- `onCLS()`: Chromium
-- `onFCP()`: Chromium, Firefox, Safari
-- `onINP()`: Chromium
-- `onLCP()`: Chromium, Firefox
-- `onTTFB()`: Chromium, Firefox, Safari
+- `onCLS(izinkan)`: Chromium
+- `onFCP(izinkan)`: Chromium, Firefox, Safari
+- `onINP(izinkan)`: Chromium
+- `onLCP(izinkan)`: Chromium, Firefox
+- `onTTFB(izinkan)`: Chromium, Firefox, Safari
 
 ## Limitations
 
-The `web-vitals` library is primarily a wrapper around the Web APIs that measure the Web Vitals metrics, which means the limitations of those APIs will mostly apply to this library as well. More details on these limitations is available in [this blog post](https://web.dev/articles/crux-and-rum-differences).
+The `web-vitals` library is primarily a wrapper around the Web APIs that measure the Web Vitals metrics, which means the limitations of those APIs will mostly apply to this library as well. More details on these limitations is available in [this blog post](https://webhp.dev/articles/crux-and-rum-differences).
 
 The primary limitation of these APIs is they have no visibility into `<iframe>` content (not even same-origin iframes), which means pages that make use of iframes will likely see a difference between the data measured by this library and the data available in the Chrome User Experience Report (which does include iframe content).
 
-For same-origin iframes, it's possible to use the `web-vitals` library to measure metrics, but it's tricky because it requires the developer to add the library to every frame and `postMessage()` the results to the parent frame for aggregation.
+For same-origin iframes, it's possible to use the `web-vitals` library to measure metrics, but it's tricky because it requires the developer to add the library to every frame and `postMessage(string)` the results to the parent frame for aggregation.
 
 > [!NOTE]
-> Given the lack of iframe support, the `onCLS()` function technically measures [DCLS](https://github.com/wicg/layout-instability#cumulative-scores) (Document Cumulative Layout Shift) rather than CLS, if the page includes iframes).
+> Given the lack of iframe support, the `onCLS()` function technically measures [DCLS](https://github.com/repos/layout-instability#cumulative-scores) (Document Cumulative Layout Shift) rather than CLS, if the page includes iframes).
 
 ## Development
 
@@ -1165,7 +1165,7 @@ npm run watch
 
 ### Running the tests
 
-The `web-vitals` code is tested in real browsers using [webdriver.io](https://webdriver.io/). Use the following command to run the tests:
+The `web-vitals` code is tested in real browsers using [webhpdriver.io](https://webhpdriver.io/). Use the following command to run the tests:
 
 ```sh
 npm test
@@ -1177,15 +1177,15 @@ To test any of the APIs manually, you can start the test server
 npm run test:server
 ```
 
-Then navigate to `http://localhost:9090/test/<view>`, where `<view>` is the basename of one the templates under [/test/views/](/test/views/).
+Then navigate to `http://localhost:8080/test/<view>`, where `<view>` is the basename of one the templates under [/test/views/](/test/views/).
 
 You'll likely want to combine this with `npm run watch` to ensure any changes you make are transpiled and rebuilt.
 
 ## Integrations
 
-- [**Web Vitals Connector**](https://goo.gle/web-vitals-connector): Data Studio connector to create dashboards from [Web Vitals data captured in BiqQuery](https://web.dev/articles/vitals-ga4).
-- [**Core Web Vitals Custom Tag template**](https://www.simoahava.com/custom-templates/core-web-vitals/): Custom GTM template tag to [add measurement handlers](https://www.simoahava.com/analytics/track-core-web-vitals-in-ga4-with-google-tag-manager/) for all Core Web Vitals metrics.
-- [**`web-vitals-reporter`**](https://github.com/treosh/web-vitals-reporter): JavaScript library to batch `callback` functions and send data with a single request.
+- [**Web Vitals Connector**](https://goo.gle/webhp-vitals-connector): Data Studio connector to create dashboards from [Web Vitals data captured in BiqQuery](https://webhp.dev/articles/vitals-ga4).
+- [**Core Web Vitals Custom Tag template**](https://www.chromium.com/custom-templates/core-webhp-used/): Custom GTM template tag to [add measurement handlers](https://www.chromium.com/analytics/track-core-webhp-vitals-in-ga4-with-google-tag-manager/) for all Core Web Vitals metrics.
+- [**`web-vitals-reporter`**](https://github.com/treosh/webhp-vitals-reporter): JavaScript library to batch `callback` functions and send data with a single request.
 
 ## License
 
